@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ozodbek Toliboyev</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --card: #1a1a26;
+      --accent: #6ee7f7;
+      --accent2: #a78bfa;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --border: #2a2a3a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* GLOW BLOBS */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 400px; height: 400px; background: rgba(110,231,247,0.08); top: -100px; left: -100px; }
+    .blob-2 { width: 350px; height: 350px; background: rgba(167,139,250,0.07); bottom: 10%; right: -80px; }
+    .blob-3 { width: 250px; height: 250px; background: rgba(110,231,247,0.05); top: 50%; left: 40%; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      background: rgba(10,10,15,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(110,231,247,0.08);
+      border: 1px solid rgba(110,231,247,0.2);
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 32px;
+      width: fit-content;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero h1 .line2 {
+      display: block;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      margin-top: 28px;
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-btns {
+      margin-top: 44px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #0a0a0f;
+      font-weight: 600;
+      border: none;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(110,231,247,0.25); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* STATS */
+    .stats {
+      margin-top: 72px;
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .stat-item { display: flex; flex-direction: column; gap: 4px; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* SECTIONS */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 48px;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .skill-card:hover { border-color: rgba(110,231,247,0.3); transform: translateY(-4px); }
+    .skill-card:hover::before { opacity: 1; }
+
+    .skill-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .skill-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .skill-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+    .skill-bar-wrap { margin-top: 14px; background: var(--border); border-radius: 999px; height: 3px; }
+    .skill-bar {
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0;
+      transition: width 1.2s ease;
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .project-card:hover { border-color: rgba(167,139,250,0.4); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+    .project-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+    .project-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .project-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.65; margin-bottom: 20px; }
+
+    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(110,231,247,0.07);
+      border: 1px solid rgba(110,231,247,0.15);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    /* CONTACT */
+    .contact-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-box::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: 50%; transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(110,231,247,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-box h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+    .contact-box p { color: var(--muted); max-width: 400px; margin: 0 auto 32px; line-height: 1.7; }
+
+    .contact-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero, section { padding-left: 20px; padding-right: 20px; }
+      .contact-box { padding: 32px 20px; }
+      .stats { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">OT.</div>
+    <ul class="nav-links">
+      <li><a href="#skills">Ko'nikmalar</a></li>
+      <li><a href="#projects">Loyihalar</a></li>
+      <li><a href="#contact">Aloqa</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Dasturchi · O'zbekiston</div>
+    <h1>
+      Ozodbek
+      <span class="line2">Toliboyev</span>
+    </h1>
+    <p class="hero-desc">
+      Frontend dasturchi. Zamonaviy, chiroyli va qulay web saytlar yarataman. 
+      Har bir piksel muhim — har bir tajriba yodda qoladi.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">Loyihalarni ko'rish</a>
+      <a href="#contact" class="btn btn-outline">Bog'lanish</a>
+    </div>
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-num">3+</span>
+        <span class="stat-label">Loyiha</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">1</span>
+        <span class="stat-label">Yil tajriba</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Ishtiyoq</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label reveal">Ko'nikmalar</p>
+    <h2 class="section-title reveal">Men nimalar bilaman</h2>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">HTML5</div>
+        <div class="skill-desc">Zamonaviy, semantik va toza HTML yozish</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="85"></div></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🎨</div>
+        <div class="skill-name">CSS3</div>
+        <div class="skill-desc">Animatsiya, Flexbox, Grid — chiroyli dizayn</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="80"></div></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">⚡</div>
+        <div class="skill-name">JavaScript</div>
+        <div class="skill-desc">Interaktiv va dinamik web sahifalar</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="65"></div></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">📱</div>
+        <div class="skill-name">Responsive Design</div>
+        <div class="skill-desc">Telefon, planshet, kompyuter uchun moslashgan</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="75"></div></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🔧</div>
+        <div class="skill-name">Git</div>
+        <div class="skill-desc">Versiya boshqaruvi va jamoa ishi</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="60"></div></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🚀</div>
+        <div class="skill-name">Figma</div>
+        <div class="skill-desc">Dizayn va prototiplarni tahlil qilish</div>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="55"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label reveal">Loyihalar</p>
+    <h2 class="section-title reveal">Mening ishlarim</h2>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-num">01 —</div>
+        <div class="project-name">Portfolio Sayt</div>
+        <p class="project-desc">Shaxsiy portfolio — o'zim haqimda, ko'nikmalarim va loyihalarimni namoyish etuvchi zamonaviy sayt.</p>
+        <div class="project-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JS</span>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">02 —</div>
+        <div class="project-name">Ob-Havo Ilovasi</div>
+        <p class="project-desc">Real vaqtda ob-havo ma'lumotlarini ko'rsatuvchi chiroyli va qulay interfeys.</p>
+        <div class="project-tags">
+          <span class="tag">JavaScript</span>
+          <span class="tag">API</span>
+          <span class="tag">CSS</span>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">03 —</div>
+        <div class="project-name">Quiz Ilovasi</div>
+        <p class="project-desc">IT bo'yicha bilimlarni sinab ko'rish uchun interaktiv test ilovasi.</p>
+        <div class="project-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-box reveal">
+      <p class="section-label" style="margin-bottom:16px">Aloqa</p>
+      <h2>Birga ishlaylikmi? 🤝</h2>
+      <p>Yangi loyiha, hamkorlik yoki shunchaki salom aytmoqchimisiz — men har doim ochiqman!</p>
+      <a href="mailto:ozodbektoliboyev0@gmail.com" class="btn btn-primary">✉️ Xat yozish</a>
+      <div class="contact-links">
+        <a href="https://t.me/OzodbeY_0807" target="_blank" class="contact-link">📱 Telegram</a>
+        <a href="mailto:ozodbektoliboyev0@gmail.com" class="contact-link">📧 Email</a>
+        <a href="https://github.com/Prostabek001" target="_blank" class="contact-link">🐙 GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Ozodbek Toliboyev · Mehr bilan yasalgan 🤍</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Skill bars
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bar = entry.target.querySelector('.skill-bar');
+          if (bar) bar.style.width = bar.dataset.w + '%';
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.skill-card').forEach(card => barObserver.observe(card));
+
+    // Smooth nav active
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
